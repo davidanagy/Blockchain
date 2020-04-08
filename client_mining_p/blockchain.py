@@ -94,7 +94,7 @@ class Blockchain(object):
     @staticmethod
     def valid_proof(block_string, proof):
         """
-        Validates the Proof:  Does hash(block_string, proof) contain 3
+        Validates the Proof:  Does hash(block_string, proof) contain 6
         leading zeroes?  Return true if the proof is valid
         :param block_string: <string> The stringified block to use to
         check in combination with `proof`
@@ -127,11 +127,15 @@ def mine():
             'type': 'error',
             'message': 'Request must be a JSON object with "proof" and "id" fields'
         }
+
+        # 400 error
+        return jsonify(response), 400
+
     else:
         proof = data['proof']
         block_string = json.dumps(blockchain.last_block, sort_keys=True)
         if blockchain.valid_proof(block_string, proof):
-            # Forge the new Block by adding it to the chain with the proof
+            # If proof is valid, forge the new Block by adding it to the chain with the proof
             previous_hash = blockchain.hash(blockchain.last_block)
             block = blockchain.new_block(proof, previous_hash)
             response = {
@@ -143,12 +147,13 @@ def mine():
                 'previous_hash': block['previous_hash']
             }
         else:
+            # If proof is not valid, return a failure response
             response = {
                 'type': 'failure',
                 'message': 'Proof not valid'
             }
 
-    return jsonify(response), 200
+        return jsonify(response), 200
 
 
 @app.route('/chain', methods=['GET'])
@@ -163,7 +168,7 @@ def full_chain():
 @app.route('/last_block', methods=['GET'])
 def get_last_block():
     response = {'block': blockchain.last_block}
-    return jsonify(response)
+    return jsonify(response), 200
 
 
 # Run the program on port 5000
