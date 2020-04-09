@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!-- Picniss stylesheet -->
+        <link rel="stylesheet" href="https://unpkg.com/picnic">
+        <titile> DavidCoin Wallet - {{ title }}</titile>
+    </head>
+
+    <body>
+        <div class="text-center">
+            <h1> DavidCoin Wallet</h1>
+        </div>
+
+    {% block content %}
+    <br>
+    <div class="text=center">
+    <p>
+        Use this wallet to track your DavidCoin balance and transactions!
+    </p>
+    </div>
+    <br>
+    <div class="container">
+    <div class="row d-flex justify-content-center">
+        {% if user_id %}
+        <p>Welcome, {{ user_id }}!</p>
+        <br>
+        <p>To check, save, or change your ID, <a href="/user">click here</a>.</p>
+        {% else %}
+        <p>Please submit a user ID:</p>
+        <form action="/user" method="post">
+            <input type="text" name="user_id" placeholder="Enter your User ID">
+            <div class="text-center">
+                <input type="submit" value="Set ID">
+            </div>
+        </form>
+        {% endif %}
+    </div>
+    {% if user_id %}
+    <br>
+    <br>
+    <p>Your current balance is {{ balance }} DavidCoins.</p>
+    <br>
+    <br>
+    <p>Your transactions are listed below:</p>
+    <table class="primary">
+        <thead>
+            <tr>
+                <th>Sender</th>
+                <th>Recipient</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for transaction in transactions %}
+            <tr>
+                <td>{{ transaction['sender'] }}</td>
+                <td>{{ transaction['recipient'] }}</td>
+                <td>{{ transaction['amount'] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+    </div>
+
+    {% endblock %}
+    </body>
+</html>

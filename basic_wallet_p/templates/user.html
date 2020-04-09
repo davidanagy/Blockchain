@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="text-center">
+    <p>{{ message }}</p>
+    <p>To save your ID, <a href="/user/save">Click here</a>.</p>
+    <p>To change your ID, type a new ID into the box below:</p>
+    <form action="/user" method="post">
+        <input type="text" name="user_id" placeholder="Enter your new ID">
+        <div class="text-center">
+            <input type="submit" value="Change ID">
+        </div>
+    </form>
+    <p><a href="/">Click here</a> to return to the home page.</p>
+</div>
+{% endblock %}
