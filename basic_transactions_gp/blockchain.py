@@ -88,13 +88,20 @@ class Blockchain(object):
         return hex_hash
 
     def new_transaction(self, sender, recipient, amount):
+        """
+        Creates a new transaction to go into the next mined Block
+        :param sender: <str> Address of the Sender
+        :param recipient: <str> Address of the Recipient
+        :param amount: <int> Amount
+        :return: <int> The index of the Block that will hold this transaction
+        """
         obj = {
             'sender': sender,
             'recipient': recipient,
             'amount': amount
         }
         self.current_transactions.append(obj)
-        return len(self.chain) + 1
+        return self.last_block['index'] + 1
 
     @property
     def last_block(self):
@@ -146,7 +153,7 @@ def mine():
         if blockchain.valid_proof(block_string, proof):
             # Reward the miner with one coin
             miner_id = data['id']
-            blockchain.new_transaction(0, miner_id, 1)
+            blockchain.new_transaction(0, miner_id.strip(), 1)
             # If proof is valid, forge the new Block by adding it to the chain with the proof
             previous_hash = blockchain.hash(blockchain.last_block)
             block = blockchain.new_block(proof, previous_hash)
